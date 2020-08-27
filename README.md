@@ -23,7 +23,7 @@ This library extends on a sister-library integrated in it called: <a href="https
 ### Benefits
 
 - Readable syntax and scalable
-- Extremely lightweight: Only 7.2kB (1.9kB gzipped)
+- Extremely lightweight: Only 72kB (19kB gzipped)
 - No dependency: It's all Pure javascript
 - Just one blockready.js file. No CSS FILE REQUIRED!
 - Choose from a theme library (coming soon...)
@@ -65,34 +65,14 @@ BR('p').make({
 
 ```
 
-### Define your own Styles
-
-### Library of themes
-
 #### Callbacks
 
 ```
 
 ```
 
-### Full Prebuilt Styles Cheatsheet
+### Make your own Elements!
 
-```
-static STYLES = {
-    TEXT: {
-      NORMAL: {
-        name: "normal",
-        style: {
-          fontFamily: "sans-serif",
-          color: "red",
-        },
-      },
-      MONO: {
-        name: "mono",
-      },
-      SERIF: {
-        name: "serif",
-      },
-    },
-  };
-```
+### Future plans
+
+This is a open source project. Any and all contributions are highly appreciated and required. If you like the idea please show your support!
