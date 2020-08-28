@@ -1,13 +1,23 @@
-io().all();
-// io().loadTheme({}); // Loads in another theme
-// io("body").style(); // Adds default styling to only this element
-// io("card").style({ padding: "10em" }); // Overrides default padding of card elements
-io("body").style({ padding: "2em", maxWidth: "600px" });
-io(".card-click").style({ width: "100%" });
-io("h1").style({ color: "orange" });
+// io().loadTheme(BR_DARK_THEME); // Loads in another theme
+io().initAll();
+// BlockReady.loadFont("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400");
+// io("#something").theme(); // Adds default styling to only this element
+// io("card").theme({ padding: "0" }); // Overrides default padding of card elements
+io("body").theme({ padding: "2em", maxWidth: "600px" });
+io(".card-click, table").style({ width: "100%" });
+io("input").theme({
+  marginTop: "1em",
+});
+io(".add-to-list").style({ marginLeft: "1em" });
 
-io("button").make({
-  onPressed: (element, eventObject) => {
-    console.log(`Clicked: ${element}`);
+io("#theme1").make({
+  onPressed: (e, element) => {
+    io().loadTheme(BlockReady.THEME);
+  },
+});
+// BR_DARK_THEME is loaded from ./theme2.js in the HTML file
+io("#theme2").make({
+  onPressed: (e, element) => {
+    io().loadTheme(BR_DARK_THEME);
   },
 });

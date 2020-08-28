@@ -25,9 +25,6 @@ JSConstructor.prototype.style = function (styles = {}) {
     return;
   }
 
-  document.querySelector("body").style.boxSizing = "border-box";
-  document.querySelector("body").style.margin = "0";
-
   if (this.elements.length === 1) {
     styleKeys.forEach((styleName) => {
       this.elements[0].style[styleName] = styles[styleName];
@@ -41,12 +38,42 @@ JSConstructor.prototype.style = function (styles = {}) {
   }
 };
 
+// !!!!! ---------- EXTENSION ONLY FOR BlockReady ---------- !!!!!
+JSConstructor.prototype.removeStyle = function (styles = {}) {
+  // No elements found
+  if (!this.elements || this.elements.length === 0) {
+    console.error("JStyling: No elements found to style");
+    return;
+  }
+  const styleKeys = Object.keys(styles);
+  // No styles found
+  if (!styleKeys || styleKeys.length === 0) {
+    return;
+  }
+
+  if (this.elements.length === 1) {
+    styleKeys.forEach((styleName) => {
+      this.elements[0].style.removeProperty(styleName);
+      this.elements[0].style[styleName] = "";
+    });
+  } else if (this.elements.length > 1) {
+    this.elements.forEach((element) => {
+      styleKeys.forEach((styleName) => {
+        element.style.removeProperty(styleName);
+        this.elements[0].style[styleName] = "";
+      });
+    });
+  }
+};
+// !!!!! ---------- EXTENSION ONLY FOR BlockReady ---------- !!!!!
+
 const JS = function (identifier) {
   return new JSConstructor(identifier);
 };
 
 // JStyling Ends
 
+let BR_LOADED_THEME;
 class BlockReady extends JS {
   constructor(identifier) {
     super(identifier);
@@ -57,9 +84,12 @@ class BlockReady extends JS {
       // Is an element itself
       if (isElement(identifier)) this.elements = [identifier];
     }
+    if (!BR_LOADED_THEME) {
+      BR_LOADED_THEME = BlockReady.THEME;
+    }
   }
-  static STYLES = {
-    // BlockReady specific format
+  static THEME = {
+    // Standard HTML Elements
     BUTTON: {
       NORMAL: {
         fontSize: "1em",
@@ -81,63 +111,61 @@ class BlockReady extends JS {
         color: "white",
       },
     },
-    // Standard HTML Elements
-    H1: {
-      NORMAL: {
-        fontFamily: "sans-serif",
-        marginTop: ".2em",
-      },
-    },
-    H2: {
-      NORMAL: {
-        fontFamily: "sans-serif",
-        marginTop: ".2em",
-      },
-    },
-    H3: {
-      NORMAL: {
-        fontFamily: "sans-serif",
-        marginTop: ".2em",
-      },
-    },
-    H4: {
-      NORMAL: {
-        fontFamily: "sans-serif",
-        marginTop: ".2em",
-      },
-    },
-    H5: {
-      NORMAL: {
-        fontFamily: "sans-serif",
-        marginTop: ".2em",
-      },
-    },
-    H6: {
-      NORMAL: {
-        fontFamily: "sans-serif",
-        marginTop: ".2em",
-      },
-    },
     P: {
       NORMAL: {
-        color: "black",
-        fontFamily: "sans-serif",
         lineHeight: "1.4em",
       },
-      PRESSING: {
-        color: "orange",
+    },
+    LI: {
+      NORMAL: {
+        margin: ".7em 0",
+        fontSize: "1.1em",
       },
     },
     A: {
       NORMAL: {
-        textDecoration: "none",
         color: "#005fbd",
       },
       HOVERING: {
-        color: "orange",
+        color: "#003870",
       },
     },
-    // Special elements
+    TABLE: {
+      NORMAL: {
+        borderCollapse: "collapse",
+        overflowX: "auto",
+      },
+    },
+    TH: {
+      NORMAL: {
+        border: "1px solid rgba(0,0,0,.1)",
+        padding: ".6em 1em",
+        backgroundColor: "transparent",
+      },
+      HOVERING: {
+        backgroundColor: "rgba(0,0,0,0.03)",
+      },
+    },
+    TD: {
+      NORMAL: {
+        border: "1px solid rgba(0,0,0,.07)",
+        padding: ".6em 1em",
+        textAlign: "center",
+        backgroundColor: "transparent",
+      },
+      HOVERING: {
+        backgroundColor: "rgba(0,0,0,0.03)",
+      },
+    },
+    INPUT: {
+      NORMAL: {
+        border: "1px solid rgba(0,0,0,.05)",
+        padding: ".4em 1em",
+        fontSize: "1.2em",
+        borderRadius: ".2em",
+      },
+    },
+    // Create your own elements
     CARD: {
       NORMAL: {
         opacity: "1",
@@ -152,9 +180,10 @@ class BlockReady extends JS {
       },
     },
   };
-  static initAllElementsStyles = () => {
+
+  initAllElementsDefaultStyles = () => {
     // Gather all special elements nameTags
-    const styleKeys = Object.keys(BlockReady.STYLES);
+    const styleKeys = Object.keys(BR_LOADED_THEME);
     if (styleKeys.length === 0) return;
 
     // Query all special elements
@@ -165,11 +194,10 @@ class BlockReady extends JS {
 
     elements.forEach((element) => {
       // Set the style if it is available in the STYLES object
-      JS(element).style(
-        BlockReady.STYLES[element.tagName.toUpperCase()].NORMAL
-      );
-      // Setup the UI event listeners if they are available in the STYLES object
-      BlockReady.initUIStyleEventListeners(element);
+      JS(element).style(BR_LOADED_THEME[element.tagName.toUpperCase()].NORMAL);
+      // Setup the UI event listeners if they are available in the BR_LOADED_THEME object
+      this.initUIStyleEventListeners({ element });
+      element.BR_UI_STYLES_SET = true;
     });
   };
   // static isATextElement = (element) => {
@@ -187,11 +215,12 @@ class BlockReady extends JS {
   //   else return false;
   // };
   initOneDefaultStyling = (element) => {
+    if (element.BR_UI_STYLES_SET) return;
     const tagNameUpperCase = element.tagName.toUpperCase();
-    if (BlockReady.STYLES[tagNameUpperCase]) {
-      JS(element).style(BlockReady.STYLES[tagNameUpperCase].NORMAL);
+    if (BR_LOADED_THEME[tagNameUpperCase]) {
+      JS(element).style(BR_LOADED_THEME[tagNameUpperCase].NORMAL);
     }
-    BlockReady.initUIStyleEventListeners(element);
+    this.initUIStyleEventListeners({ element });
   };
   static EVENTS = {
     MOUSE_DOWN: "mouse_down",
@@ -199,44 +228,45 @@ class BlockReady extends JS {
     HOVER_ENTER: "hover_enter",
     HOVER_LEAVE: "hover_leave",
   };
-  static initUIStyleByEvent(element, eventType) {
+  initUIStyleByEvent = (element, eventType) => {
     const tagNameUpperCase = element.tagName.toUpperCase();
     // Revert the style to normal if event ends
     if (
       eventType === BlockReady.EVENTS.MOUSE_UP ||
       eventType === BlockReady.EVENTS.HOVER_LEAVE
     ) {
-      JS(element).style(BlockReady.STYLES[tagNameUpperCase].NORMAL);
+      JS(element).style(BR_LOADED_THEME[tagNameUpperCase].NORMAL);
     }
     // Otherwise apply the appropriate event style
     switch (eventType) {
       case BlockReady.EVENTS.MOUSE_DOWN:
-        JS(element).style(BlockReady.STYLES[tagNameUpperCase].PRESSING);
+        JS(element).style(BR_LOADED_THEME[tagNameUpperCase].PRESSING);
         break;
       case BlockReady.EVENTS.HOVER_ENTER:
-        JS(element).style(BlockReady.STYLES[tagNameUpperCase].HOVERING);
+        JS(element).style(BR_LOADED_THEME[tagNameUpperCase].HOVERING);
         break;
       default:
     }
-  }
-
-  static initUIStyleEventListeners = (element) => {
+  };
+  initUIStyleEventListeners = ({ element, reset }) => {
+    if (reset) element.BR_UI_EVENTS_SET = undefined;
     if (element.BR_UI_EVENTS_SET) return;
     let hovering = false;
 
-    const STYLE = BlockReady.STYLES[element.tagName.toUpperCase()];
+    const STYLE = BR_LOADED_THEME[element.tagName.toUpperCase()];
+
     if (STYLE && STYLE.PRESSING) {
       // Click events resolver Functions
       const onMouseDown = (e) => {
         e.stopPropagation();
-        BlockReady.initUIStyleByEvent(element, BlockReady.EVENTS.MOUSE_DOWN);
+        this.initUIStyleByEvent(element, BlockReady.EVENTS.MOUSE_DOWN);
       };
       const onMouseUp = (e) => {
         e.stopPropagation();
         // Take hovering into account
         if (hovering)
-          BlockReady.initUIStyleByEvent(element, BlockReady.EVENTS.HOVER_ENTER);
-        else BlockReady.initUIStyleByEvent(element, BlockReady.EVENTS.MOUSE_UP);
+          this.initUIStyleByEvent(element, BlockReady.EVENTS.HOVER_ENTER);
+        else this.initUIStyleByEvent(element, BlockReady.EVENTS.MOUSE_UP);
       };
       // Click events
       element.addEventListener("mousedown", onMouseDown);
@@ -248,11 +278,11 @@ class BlockReady extends JS {
     if (STYLE && STYLE.HOVERING) {
       // Hover events
       element.addEventListener("mouseover", (e) => {
-        BlockReady.initUIStyleByEvent(element, BlockReady.EVENTS.HOVER_ENTER);
+        this.initUIStyleByEvent(element, BlockReady.EVENTS.HOVER_ENTER);
         hovering = true;
       });
       element.addEventListener("mouseout", (e) => {
-        BlockReady.initUIStyleByEvent(element, BlockReady.EVENTS.HOVER_LEAVE);
+        this.initUIStyleByEvent(element, BlockReady.EVENTS.HOVER_LEAVE);
         hovering = false;
       });
     }
@@ -261,23 +291,23 @@ class BlockReady extends JS {
 
   initEventListeners = ({ onHover, onPressed, element }) => {
     // If element is a button, then listen to the button UI changes events like press, hover
-    BlockReady.initUIStyleEventListeners(element);
+    this.initUIStyleEventListeners({ element });
     // Click events
     if (onPressed) {
       element.addEventListener("touchstart", (e) => {
-        onPressed(element, e);
+        onPressed(e, element);
       });
       element.addEventListener("mousedown", (e) => {
-        onPressed(element, e);
+        onPressed(e, element);
       });
     }
     // Hover events
     if (onHover) {
       element.addEventListener("mouseover", (e) => {
-        onHover(element, true, e);
+        onHover(e, element, true);
       });
       element.addEventListener("mouseout", (e) => {
-        onHover(element, false, e);
+        onHover(e, element, false);
       });
     }
   };
@@ -298,7 +328,7 @@ class BlockReady extends JS {
     return this;
   };
 
-  style = (styleObject) => {
+  theme = (styleObject) => {
     // The this.elements of this method is not affected by calls on this.make()
     // because it creates a separate io() object
     this.elements.forEach((element) => {
@@ -307,21 +337,70 @@ class BlockReady extends JS {
     });
   };
 
-  all = () => {
-    JS("body").style({ opacity: "1" });
-    BlockReady.initAllElementsStyles();
+  get = () => {
+    return this.elements[0];
+  };
+
+  initAll = () => {
+    JS("body").style({
+      opacity: "1",
+      fontFamily: "Arial, sans-serif",
+      boxSizing: "border-box",
+      margin: "0",
+    });
+    JS("input").style({
+      outline: "none",
+    });
+    // Set the fontfamily for all text elements by default
+    this.initAllElementsDefaultStyles();
     return this;
   };
 
   loadTheme = (styleObject) => {
-    BlockReady.STYLES = styleObject;
+    if (styleObject.LOAD_GOOGLE_FONTS) {
+      styleObject.LOAD_GOOGLE_FONTS.forEach((link) => {
+        BlockReady.loadFont(link);
+      });
+    }
+
+    this.resetAllStyling();
+    BR_LOADED_THEME = styleObject;
+    this.initAll();
+  };
+
+  static loadFont = (url) => {
+    fetch(url)
+      .then((response) => response.text())
+      .then((data) => {
+        const style = document.createElement("style");
+        style.appendChild(document.createTextNode(data));
+        document.querySelector("head").appendChild(style);
+      })
+      .catch(function (err) {
+        console.log("Fetch Error :-S", err);
+      });
+  };
+
+  resetAllStyling = () => {
+    // Gather all special elements nameTags
+    const styleKeys = Object.keys(BR_LOADED_THEME);
+    if (styleKeys.length === 0) return;
+    // Query all special elements
+    const elements = document.querySelectorAll(
+      styleKeys.join(",").toLowerCase()
+    );
+    if (elements.length === 0) return;
+
+    elements.forEach((element) => {
+      // Set the style if it is available in the STYLES object
+      JS(element).removeStyle(
+        BR_LOADED_THEME[element.tagName.toUpperCase()].NORMAL
+      );
+      this.initUIStyleEventListeners({ element: element, reset: true });
+    });
   };
 }
 
 const io = function (el) {
-  const brbuilder = new BlockReady(el);
-  return brbuilder;
+  return new BlockReady(el);
 };
-
-// Init all BlockReady special elements
-// BlockReady.initAllSpecialElementsStyles();

@@ -5,8 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
   </head>
-  <body style="opacity: 1">
-    <notification></notification>
+  <body style="opacity: 0">
+    <img src="../docs/blockready-logo.svg" height="20" />
+    <h1>Load themes:</h1>
+    <button id="theme1">Load Default Theme</button>
+    <button id="theme2">Load Theme 2</button>
     <h1>I'm an h1</h1>
     <h2>I'm an h2</h2>
     <h3>I'm an h3</h3>
@@ -21,8 +24,6 @@
       <a href="https://baalish.com">Friendly Link</a>
     </p>
 
-    <button>Click me</button>
-    <button>Also me</button>
     <br /><br />
     <card id="card1">
       <div>
@@ -34,8 +35,59 @@
         <button class="card-click">Card click me</button>
       </div>
     </card>
+    <input placeholder="Your message here" /><button class="add-to-list">
+      Add
+    </button>
+    <h2>Random list:</h2>
+    <ul>
+      <li>Mashed Potatos</li>
+      <ol>
+        <li>Salted Mashed Potatos</li>
+        <li>Spicy Mashed Potatos</li>
+      </ol>
+      <li>Alot of Mushrooms</li>
+      <li>Plenty of MAC & CHEESE!</li>
+    </ul>
+    <table>
+      <tr>
+        <th>Company</th>
+        <th>Contact</th>
+        <th>Country</th>
+      </tr>
+      <tr>
+        <td>Germany</td>
+        <td>Alfreds</td>
+        <td>Maria Anders</td>
+      </tr>
+      <tr>
+        <td>Mexico</td>
+        <td>Centro Moctezuma</td>
+        <td>Francisco Chang</td>
+      </tr>
+      <tr>
+        <td>Austria</td>
+        <td>Ernst Handel</td>
+        <td>Roland Mendel</td>
+      </tr>
+      <tr>
+        <td>UK</td>
+        <td>Island Marketing</td>
+        <td>Helen Bennett</td>
+      </tr>
+      <tr>
+        <td>Canada</td>
+        <td>Laughing Winecellars</td>
+        <td>Yoshi Tannamuri</td>
+      </tr>
+      <tr>
+        <td>Italy</td>
+        <td>Magazzini Riuniti</td>
+        <td>Giovanni Rovelli</td>
+      </tr>
+    </table>
 
     <script src="../src/index.js"></script>
+    <script src="./theme2.js"></script>
     <script src="./client.js"></script>
   </body>
 </html>
