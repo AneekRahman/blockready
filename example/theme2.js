@@ -1,13 +1,24 @@
 const BR_DARK_THEME = {
   // Standard HTML Elements
-  LOAD_GOOGLE_FONTS: [
-    "https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;600;800&display=swap",
+  LOAD_FONTS: [
+    {
+      type: BlockReady.FONT_TYPE.GOOGLE,
+      url:
+        "https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;600;800&display=swap",
+    },
+    {
+      type: BlockReady.FONT_TYPE.RAW,
+      url:
+        "https://fonts.gstatic.com/s/poppins/v12/pxiByp8kv8JHgFVrLFj_Z1xlFd2JQEk.woff2",
+      fontFamily: "Poppins",
+      fontWeight: "200",
+    },
   ],
   BODY: {
     NORMAL: {
       backgroundColor: "#00070f",
       color: "white",
-      fontFamily: "Montserrat",
+      fontFamily: "Poppins",
       transition: ".15s",
     },
   },
@@ -17,7 +28,7 @@ const BR_DARK_THEME = {
       backgroundColor: "#ffbd38",
       border: "none",
       padding: "1em 1.5em",
-      fontWeight: "800",
+      fontWeight: "600",
       cursor: "pointer",
       fontFamily: "Montserrat",
       color: "white",

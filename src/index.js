@@ -357,28 +357,50 @@ class BlockReady extends JS {
   };
 
   loadTheme = (styleObject) => {
-    if (styleObject.LOAD_GOOGLE_FONTS) {
-      styleObject.LOAD_GOOGLE_FONTS.forEach((link) => {
-        BlockReady.loadFont(link);
-      });
+    if (!styleObject) return;
+    if (styleObject.LOAD_FONTS) {
+      styleObject.LOAD_FONTS.forEach(
+        ({ type, url, fontFamily, fontWeight }) => {
+          BlockReady.loadFont({ type, url, fontFamily, fontWeight });
+        }
+      );
     }
-
     this.resetAllStyling();
     BR_LOADED_THEME = styleObject;
     this.initAll();
   };
 
-  static loadFont = (url) => {
-    fetch(url)
-      .then((response) => response.text())
-      .then((data) => {
-        const style = document.createElement("style");
-        style.appendChild(document.createTextNode(data));
+  static FONT_TYPE = {
+    GOOGLE: "google",
+    RAW: "raw",
+  };
+
+  static loadFont = ({ type, url, fontFamily, fontWeight }) => {
+    const style = document.createElement("style");
+    switch (type) {
+      case BlockReady.FONT_TYPE.RAW:
+        const fontFaceText = `
+        @font-face {
+          font-family: '${fontFamily}';
+          src: url(${url});
+          font-weight: ${fontWeight}
+        }
+        `;
+        style.appendChild(document.createTextNode(fontFaceText));
         document.querySelector("head").appendChild(style);
-      })
-      .catch(function (err) {
-        console.log("Fetch Error :-S", err);
-      });
+        break;
+      case BlockReady.FONT_TYPE.GOOGLE:
+        fetch(url)
+          .then((response) => response.text())
+          .then((data) => {
+            style.appendChild(document.createTextNode(data));
+            document.querySelector("head").appendChild(style);
+          })
+          .catch(function (err) {
+            console.log("Fetch Error :-S", err);
+          });
+        break;
+    }
   };
 
   resetAllStyling = () => {

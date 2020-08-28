@@ -1,6 +1,5 @@
 // io().loadTheme(BR_DARK_THEME); // Loads in another theme
 io().initAll();
-// BlockReady.loadFont("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400");
 // io("#something").theme(); // Adds default styling to only this element
 // io("card").theme({ padding: "0" }); // Overrides default padding of card elements
 io("body").theme({ padding: "2em", maxWidth: "600px" });
