@@ -88,7 +88,7 @@ io("input").theme({
 
 ### .style()
 
-<b>You can also simple just style any element without the theme being allied using the .style({}) method. BlockReady extends the JStyling library. See <a href="aneekrahman.github.io/jstyling">JStyling.</a></b>
+<b>You can also simple just style any element without the theme being allied using the .style({}) method. BlockReady extends the JStyling library. See <a href="https://aneekrahman.github.io/jstyling">JStyling.</a></b>
 
 No theme styling will be put on an elements if you use:
 
