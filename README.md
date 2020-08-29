@@ -32,7 +32,9 @@ It has callbacks for basic interactions, font-loading from JS, loading a differe
 
 <img src="./docs/example.gif" width="350px" alt="Block Ready example">
 
-<a href="./example/theme2.js" download>Click here to download the 'Theme 2' and Try it</a>
+<a href="./example/theme2.js" download="true">Click here to download the 'Theme 2'</a>
+
+Simply include the theme.js file using script tags or import it, then pass it in .loadTheme(). Like [this](#loadtheme)
 
 # CDN
 
