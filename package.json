@@ -1,0 +1,39 @@
+{
+  "name": "blockready",
+  "version": "1.0.0",
+  "description": "BlockReady is a JavaScript UI library to quick setup styling for elements. It comes with a default theme enabled. But guess what? You can add as many themes as you want! Also, you can, change the styling, use callbacks, or make your OWN themes!",
+  "main": "src/index.js",
+  "directories": {
+    "doc": "docs",
+    "example": "example"
+  },
+  "files": [
+    "src/index.js"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AneekRahman/blockready.git"
+  },
+  "keywords": [
+    "javascript",
+    "theme",
+    "style",
+    "css-in-js",
+    "css",
+    "js",
+    "ui",
+    "ux",
+    "events",
+    "callbacks",
+    "template"
+  ],
+  "author": "Muhammad Aneek Rahman",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AneekRahman/blockready/issues"
+  },
+  "homepage": "https://github.com/AneekRahman/blockready#readme"
+}

@@ -1,3 +1,5 @@
+// import { io, BlockReady } from "../src/index.js";
+
 // io().loadTheme(BR_DARK_THEME); // Loads in another theme
 io().initAll();
 // io("#something").theme(); // Adds default styling to only this element

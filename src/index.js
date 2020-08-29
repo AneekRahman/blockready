@@ -200,20 +200,6 @@ class BlockReady extends JS {
       element.BR_UI_STYLES_SET = true;
     });
   };
-  // static isATextElement = (element) => {
-  //   const tagNameUpperCase = element.tagName.toUpperCase();
-  //   if (
-  //     tagNameUpperCase === "H1" ||
-  //     tagNameUpperCase === "H2" ||
-  //     tagNameUpperCase === "H3" ||
-  //     tagNameUpperCase === "H4" ||
-  //     tagNameUpperCase === "H5" ||
-  //     tagNameUpperCase === "H6" ||
-  //     tagNameUpperCase === "P"
-  //   )
-  //     return true;
-  //   else return false;
-  // };
   initOneDefaultStyling = (element) => {
     if (element.BR_UI_STYLES_SET) return;
     const tagNameUpperCase = element.tagName.toUpperCase();
@@ -311,7 +297,28 @@ class BlockReady extends JS {
       });
     }
   };
-  // Entry point
+
+  resetAllStyling = () => {
+    // Gather all special elements nameTags
+    const styleKeys = Object.keys(BR_LOADED_THEME);
+    if (styleKeys.length === 0) return;
+    // Query all special elements
+    const elements = document.querySelectorAll(
+      styleKeys.join(",").toLowerCase()
+    );
+    if (elements.length === 0) return;
+
+    elements.forEach((element) => {
+      // Set the style if it is available in the STYLES object
+      JS(element).removeStyle(
+        BR_LOADED_THEME[element.tagName.toUpperCase()].NORMAL
+      );
+      this.initUIStyleEventListeners({ element: element, reset: true });
+    });
+  };
+
+  // -------------------------------------------  ENTER POINTS
+
   make = ({ onHover, onPressed, style }) => {
     if (this.elements.length === 0) return;
 
@@ -360,8 +367,8 @@ class BlockReady extends JS {
     if (!styleObject) return;
     if (styleObject.LOAD_FONTS) {
       styleObject.LOAD_FONTS.forEach(
-        ({ type, url, fontFamily, fontWeight }) => {
-          BlockReady.loadFont({ type, url, fontFamily, fontWeight });
+        ({ type, url, fontFamily, fontWeight, linkCode }) => {
+          BlockReady.loadFont({ type, url, fontFamily, fontWeight, linkCode });
         }
       );
     }
@@ -370,59 +377,34 @@ class BlockReady extends JS {
     this.initAll();
   };
 
-  static FONT_TYPE = {
-    GOOGLE: "google",
-    RAW: "raw",
-  };
-
-  static loadFont = ({ type, url, fontFamily, fontWeight }) => {
-    const style = document.createElement("style");
+  static loadFont = ({ type, url, fontFamily, fontWeight, linkCode }) => {
     switch (type) {
-      case BlockReady.FONT_TYPE.RAW:
-        const fontFaceText = `
-        @font-face {
-          font-family: '${fontFamily}';
-          src: url(${url});
-          font-weight: ${fontWeight}
+      case "raw":
+        if (url) {
+          const fontFaceText = `
+            @font-face {
+              font-family: '${fontFamily}';
+              src: url(${url});
+              ${fontWeight ? "font-weight:" + fontWeight : ""}
+            }
+          `;
+          const style = document.createElement("style");
+          style.appendChild(document.createTextNode(fontFaceText));
+          document.querySelector("head").appendChild(style);
         }
-        `;
-        style.appendChild(document.createTextNode(fontFaceText));
-        document.querySelector("head").appendChild(style);
         break;
-      case BlockReady.FONT_TYPE.GOOGLE:
-        fetch(url)
-          .then((response) => response.text())
-          .then((data) => {
-            style.appendChild(document.createTextNode(data));
-            document.querySelector("head").appendChild(style);
-          })
-          .catch(function (err) {
-            console.log("Fetch Error :-S", err);
-          });
+      case "google":
+        if (linkCode) {
+          document.querySelector("head").innerHTML += linkCode;
+        }
         break;
     }
-  };
-
-  resetAllStyling = () => {
-    // Gather all special elements nameTags
-    const styleKeys = Object.keys(BR_LOADED_THEME);
-    if (styleKeys.length === 0) return;
-    // Query all special elements
-    const elements = document.querySelectorAll(
-      styleKeys.join(",").toLowerCase()
-    );
-    if (elements.length === 0) return;
-
-    elements.forEach((element) => {
-      // Set the style if it is available in the STYLES object
-      JS(element).removeStyle(
-        BR_LOADED_THEME[element.tagName.toUpperCase()].NORMAL
-      );
-      this.initUIStyleEventListeners({ element: element, reset: true });
-    });
   };
 }
 
 const io = function (el) {
   return new BlockReady(el);
 };
+
+export { io, BlockReady };
+export default io;

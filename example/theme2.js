@@ -2,12 +2,12 @@ const BR_DARK_THEME = {
   // Standard HTML Elements
   LOAD_FONTS: [
     {
-      type: BlockReady.FONT_TYPE.GOOGLE,
-      url:
-        "https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;600;800&display=swap",
+      type: "google",
+      linkCode:
+        '<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;800&display=swap" rel="stylesheet">',
     },
     {
-      type: BlockReady.FONT_TYPE.RAW,
+      type: "raw",
       url:
         "https://fonts.gstatic.com/s/poppins/v12/pxiByp8kv8JHgFVrLFj_Z1xlFd2JQEk.woff2",
       fontFamily: "Poppins",
