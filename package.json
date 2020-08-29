@@ -1,6 +1,6 @@
 {
   "name": "blockready",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "BlockReady is a JavaScript UI library to quick setup styling for elements. It comes with a default theme enabled. But guess what? You can add as many themes as you want! Also, you can, change the styling, use callbacks, or make your OWN themes!",
   "main": "src/index.js",
   "directories": {
@@ -8,7 +8,7 @@
     "example": "example"
   },
   "files": [
-    "src/index.js"
+    "src"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

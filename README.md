@@ -39,7 +39,7 @@ Simply include the theme.js file using script tags or import it, then pass it in
 # CDN
 
 ```
-<script src="https://unpkg.com/blockready@1.0.0/src/blockready.js">
+<script src="https://unpkg.com/blockready@1.0.2/src/blockready.js">
 ```
 
 # NPM Installation
